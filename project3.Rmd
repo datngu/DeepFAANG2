@@ -1,0 +1,180 @@
+---
+title: "Project 3"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(colorspace)
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+This is the dataset you will be working with:
+
+```{r message = FALSE, warning = FALSE}
+food <- readr::read_csv("https://wilkelab.org/DSC385/datasets/food_coded.csv")
+food
+```
+
+A detailed data dictionary for this dataset is available [here.](https://wilkelab.org/DSC385/datasets/food_codebook.pdf) The dataset was originally downloaded from Kaggle, and you can find additional information about the dataset [here.](https://www.kaggle.com/datasets/borapajo/food-choices)
+
+
+**Question:** Is GPA related to student income, the father's educational level, or the student's perception of what an ideal diet is?
+
+To answer this question, first prepare a cleaned dataset that contains only the four relevant data columns, properly cleaned so that numerical values are stored as numbers and categorical values are represented by humanly readable words or phrases. For categorical variables with an inherent order, make sure the levels are in the correct order.
+
+In your introduction, carefully describe each of the four relevant data columns. In your analysis, provide a summary of each of the four columns, using `summary()` for numerical variables and `table()` for categorical variables.
+
+Then, make one visualization each for student income, father's educational level, and ideal diet, and answer the question separately for each visualization. The three visualizations can be of the same type.
+
+**Hints:**
+
+1. Use `case_when()` to recode categorical variables.
+
+2. Use `fct_relevel()` to arrange categorical variables in the right order.
+
+3. Use `as.numeric()` to convert character strings into numerical values. It is fine to ignore warnings about `NA`s introduced by coercion.
+
+4. `NaN` stands for Not a Number and can be treated like `NA`. You do not need to replace `NaN` with `NA`.
+
+5. When using `table()`, provide the argument `useNA = "ifany"` to make sure missing values are counted: `table(..., useNA = "ifany")`.
+
+**Introduction:** *Your introduction here.*
+
+In this project, we are working with the Food choices dataset obtained from [Kaggle](https://www.kaggle.com/datasets/borapajo/food-choices). This dataset comprises responses from 126 college students to a survey of 60 questions regarding food choices, nutrition, preferences, and childhood favorites, etc.
+
+Given this dataset, our aim is to explore the relationships between GPA and factors such as student income, father's educational level, and the student's perception of an ideal diet. We will focus on four variables: 'GPA', 'income', 'father_education', and 'ideal_diet_coded'. These variables are encoded numerically, with 'GPA' is actual GPA, 'income' ranging from 1 to 6 indicating different income levels, 'father_education' ranging from 1 to 5 representing various educational levels, and 'ideal_diet_coded' ranging from 1 to 8 reflecting different perceptions of an ideal diet. As the dataset is not yet ready for visualization, we need to perform several preprocessing steps, which are detailed in the approach section.
+
+**Approach:** *Your approach here.*
+
+We first preprocess the dataset by converting columns to its right format. In details, we convert GPA to numeric floating values by as.numeric() function, regarding the remaining 3 variables, we use case_when() function to map the numeric values their meaning descriptions based on the data dictionary. We next perform data summarization with summary() table() functions for these variables. Finally, we decide to filter out all data points with at least 1 NA values (since there is not much NA data points) to obtain the cleaned dataset with 4 variables and 119 observations.
+
+To answer the question, our approach involves visualizing the GPA distribution stratified by the three factors of 'income', 'father_education', and 'ideal_diet_coded' respectively using a boxplot (geom_boxplot()). Additionally, scaling functions and theme settings are extensively applied in our approach to improve the quality of the visualizations.
+
+
+**Analysis:**
+
+```{r }
+
+# Your R code here
+## data preprocessing
+
+# select 4 most related colums to the question
+
+myfood = food %>% select(c('GPA', 'income', 'father_education', 'ideal_diet_coded' ))
+
+# encoding values based on data dictionary
+
+myfood$GPA = as.numeric(myfood$GPA)
+
+myfood = myfood %>% mutate(income = case_when(
+  income == 1 ~ 'less than $15,000',
+  income == 2 ~ '$15,001 to $30,000',
+  income == 3 ~ '$30,001 to $50,000',
+  income == 4 ~ '$50,001 to $70,000',
+  income == 5 ~ '$70,001 to $100,000',
+  income == 6 ~ 'higher than $100,000',
+  TRUE ~ NA
+))
+
+myfood$income = factor(myfood$income, 
+                       levels = c('less than $15,000',
+                                  '$15,001 to $30,000', 
+                                  '$30,001 to $50,000', 
+                                  '$50,001 to $70,000', 
+                                  '$70,001 to $100,000', 
+                                  'higher than $100,000'))
+
+myfood = myfood %>% mutate(father_education = case_when(
+  father_education == 1 ~ 'less than high school',
+  father_education == 2 ~ 'high school degree',
+  father_education == 3 ~ 'some college degree',
+  father_education == 4 ~ 'college degree',
+  father_education == 5 ~ 'graduate degree',
+  TRUE ~ NA
+))
+
+myfood$father_education =factor(myfood$father_education, 
+                                levels = c('less than high school',
+                                           'high school degree',
+                                           'some college degree',
+                                           'college degree',
+                                           'graduate degree'))
+
+myfood = myfood %>% mutate(ideal_diet_coded = case_when(
+  ideal_diet_coded == 1 ~ 'portion control',
+  ideal_diet_coded == 2 ~ 'adding veggies/eating healthier food/adding fruit',
+  ideal_diet_coded == 3 ~ 'balance',
+  ideal_diet_coded == 4 ~ 'less sugar',
+  ideal_diet_coded == 5 ~ 'home cooked/organic',
+  ideal_diet_coded == 6 ~ 'current diet',
+  ideal_diet_coded == 7 ~ 'more protein',
+  ideal_diet_coded == 8 ~ 'unclear',
+  TRUE ~ NA
+))
+
+myfood$ideal_diet_coded = factor(myfood$ideal_diet_coded,
+                                 levels = c('portion control',
+                                            'adding veggies/eating healthier food/adding fruit',
+                                            'balance',
+                                            'less sugar',
+                                            'home cooked/organic',
+                                            'current diet',
+                                            'more protein',
+                                            'unclear'))
+
+
+## explore the dataset
+## gpa
+summary(myfood$GPA)
+## income
+table(myfood$income, useNA = "ifany")
+## father's education
+table(myfood$father_education, useNA = "ifany")
+## diet perception
+table(myfood$ideal_diet_coded, useNA = "ifany")
+
+# count number of NAs for each colums
+colSums(is.na(myfood))
+
+# missing proportions
+colSums(is.na(myfood))/ nrow(myfood)
+# it is not significant to the data size => I decided to remove all data points with at least 1 NA
+
+myfood = na.omit(myfood)
+
+```
+
+
+
+```{r }
+
+# Your R code here
+## this part is for plotting
+
+ggplot(myfood, aes(x = GPA, y = income, fill = income)) +
+  geom_boxplot(show.legend = FALSE) +
+  xlab('GPA') + 
+  ylab('Income') +
+  ggtitle('GPA vs Income') +
+  theme_bw()
+
+
+ggplot(myfood, aes(x = GPA, y = father_education, fill = father_education)) +
+  geom_boxplot(show.legend = FALSE) +
+  xlab('GPA') + 
+  ylab('Father\'s education') +
+  ggtitle('GPA vs Father\'s education') +
+  theme_bw()
+
+
+ggplot(myfood, aes(x = GPA, y = ideal_diet_coded, fill = ideal_diet_coded)) +
+  geom_boxplot(show.legend = FALSE) +
+  xlab('GPA') + 
+  ylab('Student\'s perception of ideal diet') +
+  ggtitle('GPA vs student\'s perception of ideal diet') +
+  theme_bw()
+
+```
+
+**Discussion:** *Your discussion of results here.*
+

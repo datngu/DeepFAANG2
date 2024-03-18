@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --account=nn10039k            
-#SBATCH --job-name=DeepATT_1e4
+#SBATCH --job-name=DanQ_5e4
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
-#SBATCH --partition=a100
+#SBATCH --partition=100
 #SBATCH --gpus=1
 #SBATCH --ntasks=8
 #SBATCH --time=10-00:00:00  # 10 days               
@@ -60,9 +60,9 @@ run_training_standard() {
 
 ## running
 ## model
-model='DeepATT'
+model='DanQ'
 n_pad_windows='2'
-lr='1e-4'
+lr='5e-4'
 spec='salmon'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'

@@ -36,6 +36,39 @@ class BinaryFocalLoss(nn.Module):
 
 
 
+
+class WeightedBinaryFocalLoss(nn.Module):
+    def __init__(self, alpha=0.25, gamma=2, reduction='mean'):
+        super(BinaryFocalLoss, self).__init__()
+        self.alpha = alpha
+        self.gamma = gamma
+        self.reduction = reduction
+
+    def forward(self, inputs, targets):
+        # Compute binary cross entropy loss
+        BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
+
+        # Compute the modulating factor
+        p_t = torch.exp(-BCE_loss)
+        modulating_factor = (1 - p_t)**self.gamma
+
+        # Compute the focal loss
+        focal_loss = modulating_factor * BCE_loss
+
+        # Apply class balancing
+        alpha_t = self.alpha * targets + (1 - self.alpha) * (1 - targets)
+        balanced_focal_loss = alpha_t * focal_loss
+
+        if self.reduction == 'mean':
+            return balanced_focal_loss.mean()
+        elif self.reduction == 'sum':
+            return balanced_focal_loss.sum()
+        else:
+            return balanced_focal_loss
+
+
+
+
 # Get cpu, gpu or mps device for training.
 device = (
     "cuda"
@@ -112,7 +145,7 @@ if __name__ == '__main__':
     if loss_fn == 'logit':
         criterion = nn.BCEWithLogitsLoss()
     elif loss_fn == 'focal':
-        criterion = BinaryFocalLoss()
+        criterion = WeightedBinaryFocalLoss()
     else:
         raise 'Not valid loss function'    
 

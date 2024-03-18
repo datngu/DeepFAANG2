@@ -79,7 +79,7 @@ if __name__ == '__main__':
     #use_logit = args.logit_loss
     lr = args.lr
     decay = args.decay
-    loss_fn = agr.loss
+    loss_fn = args.loss
 
     ## import model
     model_impoter = f'exec("from {model_in} import *")'

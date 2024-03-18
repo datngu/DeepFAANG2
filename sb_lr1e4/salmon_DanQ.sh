@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=nn10039k            
-#SBATCH --job-name=DanQ_1e3
+#SBATCH --job-name=DanQ_1e4
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
 #SBATCH --partition=accel
@@ -62,7 +62,7 @@ run_training_standard() {
 ## model
 model='DanQ'
 n_pad_windows='2'
-lr='1e-3'
+lr='1e-4'
 spec='salmon'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'

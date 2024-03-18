@@ -19,7 +19,6 @@ from utils.train_pytorch import *
 class BinaryFocalLoss(nn.Module):
     def __init__(self, gamma=2):
         super(BinaryFocalLoss, self).__init__()
-        self.alpha = alpha
         self.gamma = gamma
         self.reduction = reduction
 
@@ -76,7 +75,6 @@ if __name__ == '__main__':
     n_pad_windows = args.n_pad_windows
     num_threads = args.threads
     model_in = args.model
-    #use_logit = args.logit_loss
     lr = args.lr
     decay = args.decay
     loss_fn = args.loss
@@ -114,7 +112,7 @@ if __name__ == '__main__':
 
     if loss_fn == 'logit':
         criterion = nn.BCEWithLogitsLoss()
-    if loss_fn == 'focal':
+    elif loss_fn == 'focal':
         criterion = BinaryFocalLoss()
     else:
         raise 'Not valid loss function'    

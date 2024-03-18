@@ -20,7 +20,6 @@ class BinaryFocalLoss(nn.Module):
     def __init__(self, gamma=2):
         super(BinaryFocalLoss, self).__init__()
         self.gamma = gamma
-        self.reduction = reduction
 
     def forward(self, inputs, targets):
         # Compute binary cross entropy loss

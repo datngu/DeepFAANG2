@@ -39,7 +39,7 @@ class BinaryFocalLoss(nn.Module):
 
 class WeightedBinaryFocalLoss(nn.Module):
     def __init__(self, alpha=0.25, gamma=2, reduction='mean'):
-        super(BinaryFocalLoss, self).__init__()
+        super(WeightedBinaryFocalLoss, self).__init__()
         self.alpha = alpha
         self.gamma = gamma
         self.reduction = reduction

@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     parser.add_argument("--out", default = "model_out_dir", help = "model output directory")
     parser.add_argument('--window_len', type=int, default = 200, help = 'window len, default 200bp')
-    parser.add_argument('--n_center_windowss', type=int, default = 1, help = 'n center windows: n windows the model will predict lables')
+    parser.add_argument('--n_center_windows', type=int, default = 1, help = 'n center windows: n windows the model will predict lables')
     parser.add_argument('--n_pad_windows', type=int, default = 25, help = 'n padding windows: n windows paded in both sides. For example: seq len 1000 bp has n_pad_windows = 2 (*200) - or 400bp each sides; seq len 10200 bp has n_pad_windows = 25 (*200) - or 5000bp each sides.')
     parser.add_argument('--batch_size', type=int, default = 256, help = 'batch size for training')
     parser.add_argument('--threads', type=int, default = 0, help = 'CPU cores for data pipeline loading')

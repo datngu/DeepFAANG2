@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --account=nn10039k            
-#SBATCH --job-name=wflDanQ_1e4
+#SBATCH --job-name=DeepSEA_5e5
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
-#SBATCH --partition=accel
+#SBATCH --partition=a100
 #SBATCH --gpus=1
 #SBATCH --ntasks=8
 #SBATCH --time=10-00:00:00  # 10 days               
@@ -47,7 +47,7 @@ run_training_standard() {
         --train ${train_data} \
         --val /data/${val_data} \
         --model models.${model} \
-        --out /work_dir/${outdir}/${spec}_${model}_${lr}_${loss}_weighted \
+        --out /work_dir/${outdir}/${spec}_${model}_${lr}_${loss} \
         --threads 8 \
         --lr ${lr} \
         --decay 1e-6 \
@@ -60,12 +60,12 @@ run_training_standard() {
 
 ## running
 ## model
-model='DanQ'
+model='DeepSEA'
 n_pad_windows='2'
-lr='1e-4'
+lr='5e-5'
 spec='salmon'
 
-#run_training_standard $model $n_pad_windows $lr $spec 'logit'
+run_training_standard $model $n_pad_windows $lr $spec 'logit'
 
 run_training_standard $model $n_pad_windows $lr $spec 'focal'
 

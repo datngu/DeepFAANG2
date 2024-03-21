@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=nn10039k            
-#SBATCH --job-name=DeepSEA_1e4
+#SBATCH --job-name=DeepSEA_1e3
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
 #SBATCH --partition=a100
@@ -62,10 +62,9 @@ run_training_standard() {
 ## model
 model='DeepSEA'
 n_pad_windows='2'
-lr='1e-4'
+lr='1e-3'
 spec='salmon'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'
 
-run_training_standard $model $n_pad_windows $lr $spec 'focal'
 

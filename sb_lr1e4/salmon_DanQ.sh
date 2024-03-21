@@ -3,7 +3,7 @@
 #SBATCH --job-name=DanQ_1e4
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
-#SBATCH --partition=accel
+#SBATCH --partition=a100
 #SBATCH --gpus=1
 #SBATCH --ntasks=8
 #SBATCH --time=10-00:00:00  # 10 days               
@@ -67,5 +67,4 @@ spec='salmon'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'
 
-run_training_standard $model $n_pad_windows $lr $spec 'focal'
 

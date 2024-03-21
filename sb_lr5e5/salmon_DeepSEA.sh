@@ -67,5 +67,4 @@ spec='salmon'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'
 
-run_training_standard $model $n_pad_windows $lr $spec 'focal'
 

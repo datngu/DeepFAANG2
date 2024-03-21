@@ -41,6 +41,7 @@ run_validation() {
 
 
 spec='salmon'
+lr='1e-4'
 model='DanQ'
 n_pad_windows='2'
 

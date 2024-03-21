@@ -109,7 +109,7 @@ if __name__ == '__main__':
     parser.add_argument("--model", required = True, help = "model class (in a python script) to import")
     parser.add_argument("--model_weight", required = True, help = "model weights (ih *.th file) to import")
     parser.add_argument('--threads', type=int, default = 0, help = 'CPU cores for data pipeline loading')
-    parser.add_argument('--logit', type=int, default = 0, help = 'need sigmoid transformation?')
+    parser.add_argument('--logit', type=int, default = 1, help = 'need sigmoid transformation?')
     
 
     ### input args

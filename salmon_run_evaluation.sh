@@ -3,7 +3,7 @@
 #SBATCH --job-name=eval 
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
-#SBATCH --partition=a100
+#SBATCH --partition=accel
 #SBATCH --gpus=1
 #SBATCH --ntasks=8
 #SBATCH --time=3-00:00:00  # 1 days               
@@ -13,23 +13,15 @@
 
 
 
-
-# lr='1e-4'
-
-# ## model
-# model='FARformer_1k'
-# n_pad_windows='2'
-# lr='1e-5'
-# spec='salmon'
-
 run_validation() {
     model=$1
     n_pad_windows=$2
     lr=$3
     spec=$4
-    echo "running evaluation $spect $model, $lr"
+    loss=$5
+    echo "running evaluation $spec $model, $lr, $loss"
 
-    ## fixed_variables
+
     img=/cluster/projects/nn10039k/dat/singularity/ndatth-pytorch-v0.0.0.img
     data_dir=/cluster/projects/nn10039k/dat/run_deeplearning/data_${spec}
 
@@ -41,39 +33,52 @@ run_validation() {
         --batch_size 128 \
         --threads 8 \
         --model models.${model} \
-        --model_weight /work_dir/train_results/${spec}_${model}_${lr}/best_model.th  \
-        --out /work_dir/train_evaluations/${spec}_${model}_${lr}.pkl
+        --model_weight /work_dir/train_results/${spec}_${model}_${lr}_${loss}/best_model.th  \
+        --out /work_dir/train_evaluations/${spec}_${model}_${lr}_${loss}.pkl
 
 }
 
 
 
-## here only run salmon
 spec='salmon'
-all_learning_rates=("1e-3" "1e-4" "1e-5" "5e-3" "5e-4" "5e-5")
-
-
-
-### 10k sequence
-all_models=("FARformer_10k")
-n_pad_windows='25'
-
-for lr in "${all_learning_rates[@]}"; do
-    for model in "${all_models[@]}"; do
-        run_validation $model $n_pad_windows $lr $spec
-    done
-done
-
-
-
-### 1k models
-all_models=("DeepSEA" "DanQ" "DeepATT" "DeepFormer" "FARformer_1k")
+model='DanQ'
 n_pad_windows='2'
 
-for lr in "${all_learning_rates[@]}"; do
-    for model in "${all_models[@]}"; do
-        run_validation $model $n_pad_windows $lr $spec
-    done
-done
+run_validation $model $n_pad_windows $lr $spec focal_weighted 
+run_validation $model $n_pad_windows $lr $spec focal_test
+run_validation $model $n_pad_windows $lr $spec logit
+
+
+
+
+
+
+## here only run salmon
+#spec='salmon'
+# all_learning_rates=("1e-3" "1e-4" "1e-5" "5e-3" "5e-4" "5e-5")
+
+
+
+# ### 10k sequence
+# all_models=("FARformer_10k")
+# n_pad_windows='25'
+
+# for lr in "${all_learning_rates[@]}"; do
+#     for model in "${all_models[@]}"; do
+#         run_validation $model $n_pad_windows $lr $spec
+#     done
+# done
+
+
+
+# ### 1k models
+# all_models=("DeepSEA" "DanQ" "DeepATT" "DeepFormer" "FARformer_1k")
+# n_pad_windows='2'
+
+# for lr in "${all_learning_rates[@]}"; do
+#     for model in "${all_models[@]}"; do
+#         run_validation $model $n_pad_windows $lr $spec
+#     done
+# done
 
 

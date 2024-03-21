@@ -3,7 +3,7 @@
 #SBATCH --job-name=DanQ_1e5
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
-#SBATCH --partition=100
+#SBATCH --partition=a100
 #SBATCH --gpus=1
 #SBATCH --ntasks=8
 #SBATCH --time=10-00:00:00  # 10 days               

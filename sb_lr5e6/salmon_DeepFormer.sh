@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=nn10039k            
-#SBATCH --job-name=DeepFormer_5e5
+#SBATCH --job-name=DeepFormer_5e6
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
 #SBATCH --partition=a100
@@ -62,10 +62,9 @@ run_training_standard() {
 ## model
 model='DeepFormer'
 n_pad_windows='2'
-lr='5e-5'
+lr='5e-6'
 spec='salmon'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'
 
-run_training_standard $model $n_pad_windows $lr $spec 'focal'
 

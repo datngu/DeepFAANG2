@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --account=nn10039k            
-#SBATCH --job-name=DeepFormer_5e5
+#SBATCH --job-name=DeepATT_5e5
 #SBATCH --nodes=1    
 #SBATCH --mem=64G
 #SBATCH --partition=a100
@@ -60,10 +60,10 @@ run_training_standard() {
 
 ## running
 ## model
-model='DeepFormer'
+model='DeepATT'
 n_pad_windows='2'
 lr='5e-5'
-spec='salmon'
+spec='cattle'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'
 

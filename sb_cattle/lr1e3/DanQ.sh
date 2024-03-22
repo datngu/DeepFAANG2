@@ -63,7 +63,7 @@ run_training_standard() {
 model='DanQ'
 n_pad_windows='2'
 lr='1e-3'
-spec='salmon'
+spec='cattle'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'
 

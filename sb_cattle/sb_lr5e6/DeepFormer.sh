@@ -63,7 +63,7 @@ run_training_standard() {
 model='DeepFormer'
 n_pad_windows='2'
 lr='5e-6'
-spec='salmon'
+spec='cattle'
 
 run_training_standard $model $n_pad_windows $lr $spec 'logit'
 

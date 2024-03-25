@@ -26,7 +26,7 @@ run_validation() {
     data_dir=/cluster/projects/nn10039k/dat/run_deeplearning/data_${spec}
 
     singularity exec --nv --bind $PWD:/work_dir --bind $data_dir:/data \
-        $img python /work_dir/my_evaluator.py \
+        $img python /work_dir/my_evaluator_rc.py \
         --test /data/16_seq.test \
         --n_center_windows 1 \
         --n_pad_windows $n_pad_windows \
@@ -34,7 +34,7 @@ run_validation() {
         --threads 8 \
         --model models.${model} \
         --model_weight /work_dir/train_results/${spec}_${model}_${lr}_${loss}/best_model.th  \
-        --out /work_dir/train_evaluations/${spec}_${model}_${lr}_${loss}.pkl
+        --out /work_dir/train_evaluations_rc/${spec}_${model}_${lr}_${loss}.pkl
 
 }
 

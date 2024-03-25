@@ -151,7 +151,7 @@ if __name__ == '__main__':
 
 
     m = Eval_Model(model, use_logit)
-    ground_truth, pred = m.pred_all(test_data)
+    ground_truth, pred = m.pred_all(test_data_fw, test_data_rc)
     res = get_evals(ground_truth, pred, N_OUT)
     
     print(f'test file: {test_files}')
